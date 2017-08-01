@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<base href="/">
+	<title>Analytics results</title>
+	<style>
+		.resultsDiv{
+		  margin: auto;
+		  margin-top: 40px;
+		  width: 70%;
+		  padding: 10px;
+		}
+		.fa-angle-up{
+			color: #4cae4c;
+		}
+		.fa-angle-down{
+			color: #d43f3a;
+		}
+		.fa-minus{
+			color: #eea236;
+		}
+
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Agile Master</a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a href="#">Home<span class="sr-only">(current)</span></a></li>
+	        <li><a href="/scrum.html">Scrum bot</a></li>
+	      </ul>
+	      <form class="navbar-form navbar-left">
+	      </form>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li class="active"><a href="/results.html">Analytics results</a></li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	<script>
+	var keys = [];
+
+	for (var key in localStorage){
+	   keys.push(key);
+	}
+
+	var splitKeys = []
+
+	for(var i=0;i<keys.length-2;i++){
+		splitKeys[i] = keys[i].split("_");	
+	}
+
+	for (var i=0;i<localStorage.length-2;i++){
+		splitKeys[i].push(localStorage.getItem(localStorage.key(i)));
+	}
+
+	var resultsArrObj = [];
+
+	for (var i=0;i<splitKeys.length-2;i+=4){
+		var resultObj = {};
+		var splitLevel;
+		var actualLevel;
+		splitLevel = splitKeys[i+1][3].split(".");
+		if(splitLevel == 0)
+			actualLevel = 0;
+		else
+			actualLevel = splitLevel.length;
+
+		resultObj["sessionID"] = splitKeys[i][0];
+		resultObj["questionID"] = splitKeys[i][1];
+		resultObj["question"] = splitKeys[i+2][3];
+		resultObj["answer"] = splitKeys[i][3];
+		resultObj["level"] = actualLevel;
+		resultObj["suggested"] = splitKeys[i+3][3];
+		resultObj["path"] = splitLevel;
+		resultsArrObj.push(resultObj);
+	}
+
+	resultsArrObj.sort(function(a, b) {
+		if (parseInt(a.sessionID) < parseInt(b.sessionID)) {
+			reverse = -1;
+		} else if (parseInt(a.sessionID) > parseInt(b.sessionID)) {
+			reverse = 1;
+		} else if (parseInt(a.questionID) < parseInt(b.questionID)) {
+			reverse = -1;
+		} else {
+			reverse = 1;
+		}
+		return reverse;
+	});
+
+	console.log(resultsArrObj)
+
+	//////////// Testing
+
+	//////////// Testing
+
+	var sessionsNumber;
+	var allSessionsNumber = [];
+	var levels = [];
+
+	var myTable= "<div class='resultsDiv'><table class='table table-bordered table-striped'><tr><td style='width: 80px; color: red; text-align: center; font-weight: bold;'>SessionID</td>";
+	//myTable+= "<td style='width: 80px; color: red; text-align: left; font-weight: bold;'>QuestionID</td>";
+	myTable+= "<td style='width: 200px; color: red; text-align: left; font-weight: bold;'>Question</td>";
+	myTable+= "<td style='width: 1000px; color: red; text-align: left; font-weight: bold;'>Answer</td>";
+	myTable+= "<td style='width: 60px; color: red; text-align: center; font-weight: bold;'>Level</td>";
+	myTable+= "<td style='width: 90px; color: red; text-align: center; font-weight: bold;'>Suggested ?</td>";
+	myTable+="<td style='width: 50px; color: red; text-align: center; font-weight: bold;'>Path</td>";
+	myTable+="<td style='width: 90px; color: red; text-align: center; font-weight: bold;'>Changed ?</td></tr></div>";
+
+
+	for (var k=0;k<resultsArrObj.length; k++) {
+		var localSession;
+		if(k == 0){
+			localSession = 1;
+			myTable+="<td style='width: 80px; text-align: center;'>" + 1 + "</td>"; //SessionID
+		} else if(resultsArrObj[k].sessionID == resultsArrObj[k-1].sessionID){
+			myTable+="<td style='width: 80px; text-align: center;'>" + localSession + "</td>"; //SessionID
+		} else{
+			localSession++;
+			myTable+="<td style='width: 80px; text-align: center;'>" + localSession + "</td>"; //SessionID
+		}
+	  //myTable+="<td style='width: 80px; text-align: center;'>" + resultsArrObj[k].questionID + "</td>"; //QuestionID
+	  myTable+="<td style='width: 200px; text-align: left;'>" + resultsArrObj[k].question + "</td>"; //Question
+	  myTable+="<td style='width: 100px; text-align: left;'>" + resultsArrObj[k].answer + "</td>"; //Answer
+	  myTable+="<td style='width: 60px; text-align: center;'>" + resultsArrObj[k].level + "</td>"; //Level
+	  myTable+="<td style='width: 115px; text-align: center;'>" + resultsArrObj[k].suggested + "</td>"; //Suggested
+	  
+	  //Level
+	  if(k==0 || resultsArrObj[k].sessionID!=resultsArrObj[k-1].sessionID){
+	  	myTable+="<td style='width: 50px; text-align: center;'>" + "FQ" + "</td>"; //Path
+	  }else{
+		  var currentPath = resultsArrObj[k].path;
+		  var previousPath = resultsArrObj[k-1].path;
+		  var equalPath = 0;
+
+		  for(var i=0;i<previousPath.length;i++){
+		  	if(currentPath[i] != previousPath[i])
+		  		equalPath++;
+		  }
+
+		  if(resultsArrObj[k].level>resultsArrObj[k-1].level)
+		  	myTable+="<td style='width: 50px; text-align: center;'>" + "<i class='fa fa-angle-up fa-2x' aria-hidden='true'></i>" + "</td>";
+		  else if (resultsArrObj[k].level==resultsArrObj[k-1].level)
+		  	myTable+="<td style='width: 50px; text-align: center;'>" + "<i class='fa fa-minus' aria-hidden='true'></i>" + "</td>";
+		  else
+		  	myTable+="<td style='width: 50px; text-align: center;'>" + "<i class='fa fa-angle-down fa-2x' aria-hidden='true'></i>" + "</td>";
+	  }
+
+
+	  //Changed path
+	  if(k==0 || resultsArrObj[k].sessionID!=resultsArrObj[k-1].sessionID)
+	  	myTable+="<td style='width: 115px; text-align: center;'>" + "FQ" + "</td></tr>"; //Changed path	
+	  else if(equalPath>0)
+	  	myTable+="<td style='width: 115px; text-align: center;'>" + "Path changed" + "</td></tr>"; //Changed path
+	   else
+	   	myTable+="<td style='width: 115px; text-align: center;'>" + "Same path" + "</td></tr>"; //Changed path
+
+	  allSessionsNumber.push(resultsArrObj[k].sessionID);
+	  levels.push(resultsArrObj[k].level);
+
+	}
+
+	sessionsNumber = allSessionsNumber.filter(function(elem, index, self) {
+	    return index == self.indexOf(elem);
+	})
+
+	var highestLevel = Math.max.apply(Math, levels);
+	var averageQuestions = Math.round(((localStorage.length-2)/4)/sessionsNumber.length);  
+                            
+	myTable+="</table>";
+
+	//Calculate the knowledge map progress
+	//Define the knowledge map size (in valid questions)
+	var knowledgemapSize = 43;
+
+	//Filter the questions with level 0
+	var filterProgress1 = resultsArrObj.filter(function (el) {
+	  return el.level != 0;
+	});
+
+	//Filter the duplicates questions
+	function removeDuplicates(originalArray, objKey) {
+	  var trimmedArray = [];
+	  var values = [];
+	  var value;
+	  for(var i = 0; i < originalArray.length; i++) {
+	    value = originalArray[i][objKey];
+	    if(values.indexOf(value) === -1) {
+	      trimmedArray.push(originalArray[i]);
+	      values.push(value);
+	    }
+	  }
+	  return trimmedArray;
+	}
+	var filterProgress2 = removeDuplicates(filterProgress1, "answer")
+
+	//Calculate the progress in percentage
+	var progress = parseInt((filterProgress2.length*100)/knowledgemapSize);
+
+
+	//Display the overview section
+	var overviewContent = "<div class='resultsDiv' style='margin-top: 30px'><h3>Overview</h3><div class='row'>"
+	overviewContent+= "<div class='col-md-3'>Number of sessions: " + sessionsNumber.length + "</div>"
+	overviewContent+= "<div class='col-md-3'>Highest level reached: " + highestLevel + "</div>"
+	overviewContent+= "<div class='col-md-3'>Questions per session (Average): " + averageQuestions + "</div>"
+	overviewContent+= "<div class='col-md-3'>Knowledge map progress: " + progress + "%" + "</div>"
+	overviewContent+= "</div></div>"
+
+	document.write(overviewContent);
+	document.write(myTable);
+
+	</script>
+
+</body>
+</html>

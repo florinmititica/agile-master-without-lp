@@ -1,0 +1,80 @@
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <base href="/">
+  <title>ScrumBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:title" content="ScrumBot" />
+  <meta property="og:description" content="Scrum bot" />
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Agile Master</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Home<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="/scrum.html">Scrum bot</a></li>
+      </ul>
+      <form class="navbar-form navbar-left">
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/results.html">Analytics results</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div id="contentParent" class="chat_window">
+  <div class="top_menu">
+    <div class="buttons">
+      <a href="/index.html">
+        <div class="button close"></div>
+      </a>
+      <div class="button minimize"></div>
+      <div class="button maximize"></div>
+    </div>
+    <div class="title">Scrum Bot</div>
+  </div>
+  <div id="chat-column-holder" class="messages">
+      <div id="scrollingChat"></div>
+  </div>
+  <div class="bottom_wrapper clearfix">
+    <div class="message_input_wrapper">
+      <label for="textInput" class="message_input">
+        <input id="textInput" class="input responsive-column" onkeydown="ConversationPanel.inputKeyDown(event, this)">
+      </label>
+    </div>
+  </div>
+</div>
+<script src="js/common.js"></script>
+<script src="js/api.js"></script>
+<script src="js/conversation.js"></script>
+<script src="js/global.js"></script>
+<script>
+  function suggested() {
+    //Get the questionID
+    var localQuestionID = localStorage.getItem("questionID");
+    //Get the sessionID
+    var localSessionID = localStorage.getItem("sessionID") - 1;
+    //Concat the template
+    var suggestedTemplate = localSessionID + "_" + localQuestionID + "_suggested";
+    //Store it in local storage
+    localStorage.setItem(suggestedTemplate, "Suggested");
+  }
+</script>
+</body>
+</html>
