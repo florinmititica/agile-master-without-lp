@@ -286,7 +286,7 @@ var ConversationPanel = (function() {
       }
 
       //Log answer/question level 
-      if(isUser == false && Api.getResponsePayload().output.text[0]!="Hi, I'm ScrumBot, you can ask me about the scrum methodology"){
+      if(isUser == false && Api.getResponsePayload().output.text[0]!="Hi, I'm your Scrum Assistant, you can ask me about the scrum methodology"){
         //Setting the questionID
         var localQuestionID = localStorage.getItem("questionID");
         //Get the session ID
@@ -299,7 +299,7 @@ var ConversationPanel = (function() {
       }
 
       //Log Watson response 
-      if(isUser == false && Api.getResponsePayload().output.text[0]!="Hi, I'm ScrumBot, you can ask me about the scrum methodology"){
+      if(isUser == false && Api.getResponsePayload().output.text[0]!="Hi, I'm your Scrum Assistant, you can ask me about the scrum methodology"){
         //Get the questionID
         var localQuestionID = localStorage.getItem("questionID");
         //Get the session ID
