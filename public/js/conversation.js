@@ -244,14 +244,6 @@ var ConversationPanel = (function() {
         }
       }
 
-      //daily scrum list
-      if(isUser==false){
-        if(currentText == "The Daily Scrum is a 15-minute time-boxed event for the Development Team to synchronize activities and create a plan for the next 24 hours. This is done by inspecting the work since the last Daily Scrum and forecasting the work that could be done before the next one. The Daily Scrum is held at the same time and place each day to reduce complexity. During the meeting, the Development Team members explain:"){
-          var dailyScrum = "<ul><li>What did I do yesterday that helped the Development Team meet the Sprint Goal? </li><li>What will I do today to help the Development Team meet the Sprint Goal? </li><li>Do I see any impediment that prevents me or the Development Team from meeting the Sprint Goal? </li></ul>";
-          messageArray.push(Common.buildDomElement(extraOutput(dailyScrum))); 
-        }
-      }
-
       //display lists based on Watson's context (Watson doesn't have this functionality)
       if(isUser==false){
 
